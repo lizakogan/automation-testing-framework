@@ -1,0 +1,452 @@
+[
+  {
+    "name": "empty_input",
+    "category": "edge",
+    "input": "",
+    "expected": [],
+    "exit_code": 0
+  },
+  {
+    "name": "blank_lines",
+    "category": "edge",
+    "input": "\n \t\n",
+    "expected": [],
+    "exit_code": 0
+  },
+  {
+    "name": "initial_balance",
+    "category": "functional",
+    "input": "balance\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "balance",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "deposit",
+    "category": "functional",
+    "input": "deposit 1250\nbalance\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 1250
+      },
+      {
+        "status": "ok",
+        "code": "balance",
+        "balance_cents": 1250
+      }
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "withdraw",
+    "category": "functional",
+    "input": "deposit 100\nwithdraw 30\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 100
+      },
+      {
+        "status": "ok",
+        "code": "withdraw",
+        "balance_cents": 70
+      }
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "withdraw_exact_balance",
+    "category": "edge",
+    "input": "deposit 100\nwithdraw 100\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 100
+      },
+      {
+        "status": "ok",
+        "code": "withdraw",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "one_cent",
+    "category": "edge",
+    "input": "deposit 1\nwithdraw 1\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 1
+      },
+      {
+        "status": "ok",
+        "code": "withdraw",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "insufficient_funds",
+    "category": "edge",
+    "input": "withdraw 1\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "insufficient_funds",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "zero",
+    "category": "edge",
+    "input": "deposit 0\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_amount",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "negative",
+    "category": "edge",
+    "input": "deposit -1\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_amount",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "decimal",
+    "category": "edge",
+    "input": "deposit 1.50\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_amount",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "letters",
+    "category": "edge",
+    "input": "deposit abc\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_amount",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "mixed",
+    "category": "edge",
+    "input": "deposit 12abc\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_amount",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "plus_sign",
+    "category": "edge",
+    "input": "deposit +1\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_amount",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "exponent",
+    "category": "edge",
+    "input": "deposit 1e2\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_amount",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "amount_overflow",
+    "category": "edge",
+    "input": "deposit 9223372036854775808\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_amount",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "missing_amount",
+    "category": "edge",
+    "input": "deposit\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_arguments",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "extra_argument",
+    "category": "edge",
+    "input": "deposit 10 extra\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_arguments",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "balance_argument",
+    "category": "edge",
+    "input": "balance 10\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "invalid_arguments",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "unknown_command",
+    "category": "edge",
+    "input": "reset\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "unknown_command",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "maximum_balance",
+    "category": "edge",
+    "input": "deposit 9223372036854775807\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 9223372036854775807
+      }
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "overflow_preserves_balance",
+    "category": "regression",
+    "input": "deposit 9223372036854775807\ndeposit 1\nbalance\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 9223372036854775807
+      },
+      {
+        "status": "error",
+        "code": "balance_overflow",
+        "balance_cents": 9223372036854775807
+      },
+      {
+        "status": "ok",
+        "code": "balance",
+        "balance_cents": 9223372036854775807
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "failed_withdraw_preserves_balance",
+    "category": "regression",
+    "input": "deposit 50\nwithdraw 51\nbalance\nwithdraw 50\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 50
+      },
+      {
+        "status": "error",
+        "code": "insufficient_funds",
+        "balance_cents": 50
+      },
+      {
+        "status": "ok",
+        "code": "balance",
+        "balance_cents": 50
+      },
+      {
+        "status": "ok",
+        "code": "withdraw",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "invalid_amount_preserves_balance",
+    "category": "regression",
+    "input": "deposit 70\ndeposit -2\nbalance\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 70
+      },
+      {
+        "status": "error",
+        "code": "invalid_amount",
+        "balance_cents": 70
+      },
+      {
+        "status": "ok",
+        "code": "balance",
+        "balance_cents": 70
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "multiple_transactions",
+    "category": "regression",
+    "input": "deposit 100\nwithdraw 20\ndeposit 5\nwithdraw 85\nbalance\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 100
+      },
+      {
+        "status": "ok",
+        "code": "withdraw",
+        "balance_cents": 80
+      },
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 85
+      },
+      {
+        "status": "ok",
+        "code": "withdraw",
+        "balance_cents": 0
+      },
+      {
+        "status": "ok",
+        "code": "balance",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "whitespace_and_crlf",
+    "category": "edge",
+    "input": "  deposit\t0010\r\n balance \r\n",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 10
+      },
+      {
+        "status": "ok",
+        "code": "balance",
+        "balance_cents": 10
+      }
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_final_newline",
+    "category": "edge",
+    "input": "deposit 10",
+    "expected": [
+      {
+        "status": "ok",
+        "code": "deposit",
+        "balance_cents": 10
+      }
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "long_line_drained",
+    "category": "regression",
+    "input": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxdeposit 100\nbalance\n",
+    "expected": [
+      {
+        "status": "error",
+        "code": "line_too_long",
+        "balance_cents": 0
+      },
+      {
+        "status": "ok",
+        "code": "balance",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "long_line_at_eof",
+    "category": "edge",
+    "input": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "expected": [
+      {
+        "status": "error",
+        "code": "line_too_long",
+        "balance_cents": 0
+      }
+    ],
+    "exit_code": 1
+  }
+]
